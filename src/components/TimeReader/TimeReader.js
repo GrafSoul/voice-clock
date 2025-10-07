@@ -150,7 +150,7 @@ const TextReader = ({ hours, min }) => {
         speechSynthesis.cancel();
     };
 
-    const handlerReset = (e) => {
+    const handlerReset = () => {
         setSettings({
             rate: 1,
             pitch: 1,

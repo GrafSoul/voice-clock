@@ -2,12 +2,11 @@ import React from 'react';
 
 import classes from './Header.module.scss';
 
-const { remote } = window.require('electron');
-const mainWindow = remote.getCurrentWindow();
-
 const Header = ({ setIsSettings, isSettings }) => {
     const handleMinimizeWindow = () => {
-        mainWindow.hide();
+        if (window.electron && window.electron.hideWindow) {
+            window.electron.hideWindow();
+        }
     };
 
     const handleIsSettings = () => {
