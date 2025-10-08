@@ -2,14 +2,15 @@
 	position: relative;
 	z-index: 2000;
 	-webkit-user-select: none;
+	user-select: none;
 	background-color: #0f3854;
 	overflow: hidden;
 
 	.topBar {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-between;
-		padding: 5px 0 5px 13px;
+		justify-content: flex-end;
+		padding: 5px 0;
 		background-color: #030b11;
 		-webkit-app-region: drag;
 		position: fixed;
@@ -22,11 +23,15 @@
 	}
 
 	.title {
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
 		margin-top: 5px;
 		font-family: "SFUIProDisplay", sans-serif;
 		font-size: 16px;
 		font-weight: bold;
 		color: rgb(173, 173, 173);
+		pointer-events: none;
 	}
 
 	.title i {

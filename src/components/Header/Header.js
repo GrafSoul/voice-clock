@@ -1,11 +1,30 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 import classes from './Header.module.scss';
 
 const Header = ({ setIsSettings, isSettings }) => {
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const [isAlwaysOnTop, setIsAlwaysOnTop] = useState(true);
+
+    useEffect(() => {
+        // Получаем начальное состояние alwaysOnTop
+        if (window.electron && window.electron.getAlwaysOnTop) {
+            window.electron.getAlwaysOnTop().then(state => {
+                setIsAlwaysOnTop(state);
+            });
+        }
+    }, []);
+
     const handleMinimizeWindow = () => {
         if (window.electron && window.electron.hideWindow) {
             window.electron.hideWindow();
+        }
+    };
+
+    const handleToggleAlwaysOnTop = async () => {
+        if (window.electron && window.electron.toggleAlwaysOnTop) {
+            const newState = await window.electron.toggleAlwaysOnTop();
+            setIsAlwaysOnTop(newState);
         }
     };
 
@@ -27,16 +46,25 @@ const Header = ({ setIsSettings, isSettings }) => {
                 <div>
                     <button
                         className={classes.btnWindow}
+                        onClick={handleToggleAlwaysOnTop}
+                        title={isAlwaysOnTop ? 'Открепить окно' : 'Закрепить окно поверх'}
+                    >
+                        <i className={isAlwaysOnTop ? 'fas fa-thumbtack' : 'fal fa-thumbtack'}></i>
+                    </button>
+                    <button
+                        className={classes.btnWindow}
                         onClick={handleIsSettings}
                     >
                         <i className="fal fa-bars"></i>
                     </button>
-                    <button
-                        className={classes.btnWindow}
-                        onClick={handleMinimizeWindow}
-                    >
-                        <i className="fal fa-window-minimize" />
-                    </button>
+                    {!isMac && (
+                        <button
+                            className={classes.btnWindow}
+                            onClick={handleMinimizeWindow}
+                        >
+                            <i className="fal fa-window-minimize" />
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

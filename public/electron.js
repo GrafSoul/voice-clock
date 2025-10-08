@@ -23,6 +23,17 @@ const getIcon = () => {
     return path.join(__dirname, 'icons/16x16.png');
 };
 
+const getTrayIcon = () => {
+    if (process.platform === 'darwin') {
+        // Для macOS menu bar используем template иконку (автоматически адаптируется к светлой/темной теме)
+        return path.join(__dirname, 'icons/iconTemplate.png');
+    }
+    if (process.platform === 'win32') {
+        return path.join(__dirname, 'icons/icon.ico');
+    }
+    return path.join(__dirname, 'icons/16x16.png');
+};
+
 let mainWindow, tray, contextMenu;
 
 const createWindow = async () => {
@@ -65,10 +76,27 @@ const createWindow = async () => {
     mainWindowState.manage(mainWindow);
 
     const { ipcMain } = require('electron');
+    
     ipcMain.on('hide-window', () => {
         if (mainWindow) {
             mainWindow.hide();
         }
+    });
+
+    ipcMain.handle('toggle-always-on-top', () => {
+        if (mainWindow) {
+            const currentState = mainWindow.isAlwaysOnTop();
+            mainWindow.setAlwaysOnTop(!currentState);
+            return !currentState;
+        }
+        return false;
+    });
+
+    ipcMain.handle('get-always-on-top', () => {
+        if (mainWindow) {
+            return mainWindow.isAlwaysOnTop();
+        }
+        return false;
     });
 
     mainWindow.loadURL(
@@ -88,10 +116,22 @@ const createWindow = async () => {
         mainWindow = null;
     });
 
-    tray = new Tray(getIcon());
+    tray = new Tray(getTrayIcon());
+
+    const menuTemplate = [
+        {
+            label: 'Show/Hide',
+            click() {
+                if (mainWindow) {
+                    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+                }
+            },
+        },
+    ];
 
     if (isDev) {
-        contextMenu = Menu.buildFromTemplate([
+        menuTemplate.push(
+            { type: 'separator' },
             {
                 label: 'Developer Tools',
                 click() {
@@ -99,21 +139,19 @@ const createWindow = async () => {
                         mainWindow.webContents.toggleDevTools();
                     }
                 },
-            },
-            { type: 'separator' },
-            {
-                label: 'Exit',
-                role: 'quit',
-            },
-        ]);
-    } else {
-        contextMenu = Menu.buildFromTemplate([
-            {
-                label: 'Exit',
-                role: 'quit',
-            },
-        ]);
+            }
+        );
     }
+
+    menuTemplate.push(
+        { type: 'separator' },
+        {
+            label: 'Exit',
+            role: 'quit',
+        }
+    );
+
+    contextMenu = Menu.buildFromTemplate(menuTemplate);
 
     tray.on('click', () => {
         if (mainWindow) {
@@ -136,5 +174,8 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
+    } else if (mainWindow) {
+        // Показываем окно, если оно было скрыто (клик по иконке в Dock на macOS)
+        mainWindow.show();
     }
 });
