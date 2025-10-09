@@ -78,12 +78,12 @@
     align-items: center;
     gap: 3px;
     padding: 2px 4px;
-    background-color: rgba(10, 175, 230, 0.15);
-    border: 1px solid rgba(10, 175, 230, 0.4);
+    background-color: rgba(165, 168, 170, 0.1);
+    border: 1px solid rgba(165, 168, 170, 0.3);
     border-radius: 3px;
     font-size: 7px;
-    color: rgba(10, 175, 230, 1);
-    text-shadow: 0 0 5px rgba(10, 175, 230, 0.5);
+    color: #a5a8aa;
+    text-shadow: none;
     transition: all 0.3s ease;
     white-space: nowrap;
     cursor: pointer;
@@ -94,8 +94,9 @@
     }
 
     &:hover {
-        background-color: rgba(10, 175, 230, 0.25);
-        border-color: rgba(10, 175, 230, 0.6);
+        background-color: rgba(165, 168, 170, 0.2);
+        border-color: rgba(165, 168, 170, 0.5);
+        color: #fff;
         transform: scale(1.02);
     }
 
