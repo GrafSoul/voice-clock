@@ -1,6 +1,8 @@
 .clockContent {
     margin-top: 49px;
     cursor: default;
+    position: relative;
+    z-index: 500;
 }
 
 .digitalTime {
