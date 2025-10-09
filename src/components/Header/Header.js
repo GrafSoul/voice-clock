@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import classes from './Header.module.scss';
 
-const Header = ({ setIsSettings, isSettings, setIsAlarmManager }) => {
+const Header = ({ setIsSettings, isSettings, setIsAlarmManager, isAlarmManager }) => {
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
     const [isAlwaysOnTop, setIsAlwaysOnTop] = useState(true);
 
@@ -53,7 +53,7 @@ const Header = ({ setIsSettings, isSettings, setIsAlarmManager }) => {
                     </button>
                     <button
                         className={classes.btnWindow}
-                        onClick={() => setIsAlarmManager(true)}
+                        onClick={() => setIsAlarmManager(!isAlarmManager)}
                         title="Alarm Settings"
                     >
                         <i className="fal fa-alarm-clock"></i>

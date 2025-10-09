@@ -106,6 +106,7 @@ const App = () => {
                 setIsSettings={setIsSettings}
                 isSettings={isSettings}
                 setIsAlarmManager={setIsAlarmManager}
+                isAlarmManager={isAlarmManager}
             />
             <Clock time={time} date={date} week={week} pm={pm} />
             <div
