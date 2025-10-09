@@ -1,7 +1,7 @@
 .alarmPanel {
     width: 266px;
     height: 175px;
-    padding: 10px;
+    padding: 5px;
     position: absolute;
     top: 0;
     left: 0;
@@ -9,9 +9,9 @@
     transition: 0.5s all ease-in;
     overflow-y: auto;
     z-index: 1500;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
 
     &::-webkit-scrollbar {
         width: 3px;
@@ -32,31 +32,31 @@
 }
 
 .newAlarm {
-    margin-bottom: 7px;
-    padding-bottom: 7px;
-    border-bottom: 1px solid rgba(10, 175, 230, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
 .formGroup {
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 
     label {
         display: block;
-        font-size: 7px;
+        font-size: 6px;
         color: #a5a8aa;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
     }
 }
 
 .timeInput,
 .textInput {
     width: 100%;
-    padding: 2px 4px;
+    padding: 1px 3px;
     background-color: #071925;
     border: 1px solid #3d3d3d;
     border-radius: 2px;
     color: #fff;
-    font-size: 8px;
+    font-size: 7px;
     outline: none;
     transition: all 0.3s ease;
 
@@ -66,20 +66,21 @@
 }
 
 .presetButtons {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 2px;
-    flex-wrap: wrap;
 
     button {
-        padding: 2px 4px;
+        padding: 2px 3px;
         background-color: #071925;
         border: 1px solid #3d3d3d;
         border-radius: 2px;
         color: #a5a8aa;
-        font-size: 7px;
+        font-size: 6px;
         cursor: pointer;
         outline: none;
         transition: all 0.3s ease;
+        white-space: nowrap;
 
         &:hover {
             background-color: #0f3854;
@@ -94,17 +95,17 @@
 }
 
 .daysSelector {
-    display: flex;
-    gap: 2px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
 
     button {
-        flex: 1;
-        padding: 2px;
+        padding: 2px 1px;
         background-color: #071925;
         border: 1px solid #3d3d3d;
         border-radius: 2px;
         color: #a5a8aa;
-        font-size: 6px;
+        font-size: 5px;
         cursor: pointer;
         outline: none;
         transition: all 0.3s ease;
@@ -129,14 +130,14 @@
     border: 1px solid rgba(10, 175, 230, 0.5);
     border-radius: 2px;
     color: #fff;
-    font-size: 7px;
+    font-size: 6px;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
-    margin-top: 4px;
+    margin-top: 2px;
 
     i {
-        margin-right: 2px;
+        margin-right: 1px;
     }
 
     &:hover {
@@ -145,28 +146,36 @@
 }
 
 .alarmsList {
-    h3 {
-        margin: 7px 0 4px 0;
-        font-size: 8px;
-        color: #a5a8aa;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(10, 175, 230, 0.3);
     }
 }
 
 .emptyState {
     text-align: center;
     color: #a5a8aa;
-    font-size: 7px;
-    padding: 7px;
+    font-size: 6px;
+    padding: 5px;
 }
 
 .alarmsGrid {
-    display: grid;
-    gap: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
 .alarmCard {
     background-color: rgba(3, 11, 17, 0.7);
-    padding: 4px;
+    padding: 3px;
     border-radius: 2px;
     border: 1px solid rgba(10, 175, 230, 0.2);
     transition: all 0.3s ease;
@@ -184,7 +193,7 @@
 }
 
 .alarmTime {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: bold;
     color: #fff;
     text-shadow: 0 0 5px rgba(10, 175, 230, 0.5);
@@ -249,18 +258,18 @@
 
 .deleteBtn {
     width: 100%;
-    padding: 2px;
+    padding: 1px;
     background-color: rgba(255, 0, 0, 0.1);
     border: 1px solid rgba(255, 0, 0, 0.3);
     border-radius: 2px;
     color: #ff6b6b;
-    font-size: 6px;
+    font-size: 5px;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
 
     i {
-        margin-right: 2px;
+        margin-right: 1px;
     }
 
     &:hover {
