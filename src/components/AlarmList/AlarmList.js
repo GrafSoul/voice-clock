@@ -13,7 +13,7 @@ const AlarmList = ({ alarms, setIsAlarmManager }) => {
                     onClick={() => setIsAlarmManager(true)}
                 >
                     <i className="fas fa-plus-circle"></i>
-                    <span>Выбрать будильник</span>
+                    <span>Set Alarm</span>
                 </button>
             </div>
         );
