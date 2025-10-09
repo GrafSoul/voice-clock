@@ -83,6 +83,8 @@ const App = () => {
         setActiveAlarm(null);
     };
 
+    const activeAlarmsCount = alarms.filter((alarm) => alarm.enabled).length;
+
     return (
         <main className={classes.mainContent}>
             <Header
@@ -91,7 +93,7 @@ const App = () => {
                 setIsAlarmManager={setIsAlarmManager}
                 isAlarmManager={isAlarmManager}
             />
-            <Clock time={time} date={date} week={week} pm={pm} />
+            <Clock time={time} date={date} week={week} pm={pm} activeAlarmsCount={activeAlarmsCount} />
             <div
                 className={[
                     classes.settingsContent,
