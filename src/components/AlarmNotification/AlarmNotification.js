@@ -39,28 +39,23 @@ const AlarmNotification = ({ alarm, onDismiss, onSnooze }) => {
     return (
         <div className={classes.overlay}>
             
-            <div className={classes.notification}>
-                <div className={classes.icon}>
-                    <i className="fas fa-bell"></i>
-                </div>
+            <div className={classes.icon}>
+                <i className="fas fa-bell"></i>
+            </div>
                 
-                <div className={classes.content}>
-                    <div className={classes.time}>{alarm.time}</div>
-                    {alarm.label && (
-                        <div className={classes.label}>{alarm.label}</div>
-                    )}
-                </div>
+            <div className={classes.content}>
+                <div className={classes.time}>{alarm.time}</div>
+            </div>
 
-                <div className={classes.actions}>
-                    <button onClick={handleSnooze} className={classes.snoozeBtn}>
-                        <i className="fas fa-clock"></i>
-                        <span>Snooze 5min</span>
-                    </button>
-                    <button onClick={handleDismiss} className={classes.dismissBtn}>
-                        <i className="fas fa-times-circle"></i>
-                        <span>Dismiss</span>
-                    </button>
-                </div>
+            <div className={classes.actions}>
+                <button onClick={handleSnooze} className={classes.snoozeBtn}>
+                    <i className="fas fa-clock"></i>
+                    <span>Snooze 5min</span>
+                </button>
+                <button onClick={handleDismiss} className={classes.dismissBtn}>
+                    <i className="fas fa-times-circle"></i>
+                    <span>Dismiss</span>
+                </button>
             </div>
         </div>
     );

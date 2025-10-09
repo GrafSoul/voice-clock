@@ -27,9 +27,6 @@ const AlarmList = ({ alarms }) => {
                 <div key={alarm.id} className={classes.alarmItem}>
                     <i className="fas fa-bell"></i>
                     <span className={classes.time}>{alarm.time}</span>
-                    {alarm.label && (
-                        <span className={classes.label}> - {alarm.label}</span>
-                    )}
                     <span className={classes.days}>({getDaysDisplay(alarm.days)})</span>
                 </div>
             ))}

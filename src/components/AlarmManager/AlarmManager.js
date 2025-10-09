@@ -131,19 +131,6 @@ const AlarmManager = ({ alarms, setAlarms, onClose }) => {
                 </div>
 
                 <div className={classes.formGroup}>
-                    <label>Label (optional)</label>
-                    <input
-                        type="text"
-                        value={newAlarm.label}
-                        onChange={(e) =>
-                            setNewAlarm({ ...newAlarm, label: e.target.value })
-                        }
-                        placeholder="Wake up, Meeting, etc."
-                        className={classes.textInput}
-                    />
-                </div>
-
-                <div className={classes.formGroup}>
                     <label>Repeat</label>
                     <div className={classes.presetButtons}>
                         <button
@@ -242,11 +229,6 @@ const AlarmManager = ({ alarms, setAlarms, onClose }) => {
                                         <span className={classes.slider}></span>
                                     </label>
                                 </div>
-                                {alarm.label && (
-                                    <div className={classes.alarmLabel}>
-                                        {alarm.label}
-                                    </div>
-                                )}
                                 <div className={classes.alarmDays}>
                                     {getDaysDisplay(alarm.days)}
                                 </div>
