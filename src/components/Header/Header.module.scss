@@ -32,15 +32,18 @@
 		font-weight: bold;
 		color: rgb(173, 173, 173);
 		pointer-events: none;
+		display: flex;
+		align-items: center;
+		gap: 3px;
 	}
 
 	.title i {
-		margin-right: 3px;
+		margin-right: 0;
 	}
 
 	.logo {
-		margin-bottom: -1px;
 		display: inline-block;
+		vertical-align: middle;
 	}
 
 	.btnWindow {
