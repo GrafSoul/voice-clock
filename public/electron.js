@@ -1,4 +1,3 @@
-'use strict';
 const { app, BrowserWindow, Tray, Menu } = require('electron');
 const windowStateKeeper = require('electron-window-state');
 const path = require('path');
@@ -47,8 +46,8 @@ const createWindow = async () => {
     }
 
     let mainWindowState = windowStateKeeper({
-        defaultWidth: 400,
-        defaultHeight: 250,
+        defaultWidth: 280,
+        defaultHeight: 175,
     });
 
     mainWindow = new BrowserWindow({
@@ -61,8 +60,8 @@ const createWindow = async () => {
         icon: getIcon(),
         x: mainWindowState.x,
         y: mainWindowState.y,
-        width: mainWindowState.width,
-        height: mainWindowState.height,
+        width: 280,
+        height: 175,
         titleBarStyle: 'hidden',
         backgroundColor: '#282c34',
         webPreferences: {

@@ -5,13 +5,13 @@ module.exports = {
         es6: true,
         node: true,
     },
-    extends: 'eslint:recommended',
+    extends: ['eslint:recommended', 'react-app'],
     globals: {
         Atomics: 'readonly',
         SharedArrayBuffer: 'readonly',
     },
     parserOptions: {
-        ecmaVersion: 2018,
+        ecmaVersion: 2020,
         sourceType: 'module',
         ecmaFeatures: {
             jsx: true,
@@ -21,5 +21,10 @@ module.exports = {
         indent: ['error', 4],
         quotes: ['error', 'single'],
         semi: ['error', 'always'],
+    },
+    settings: {
+        react: {
+            version: 'detect',
+        },
     },
 };

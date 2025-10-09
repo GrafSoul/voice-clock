@@ -1,12 +1,12 @@
 .settingsContent {
-    padding: 23px 0 0;
+    padding: 16px 0 0;
     display: flex;
 }
 
 .settings button {
     display: inline-block;
-    margin-right: 8px;
-    margin-top: 4px;
+    margin-right: 6px;
+    margin-top: 3px;
 }
 
 .settingsMinutes {
@@ -17,13 +17,13 @@
 }
 
 .settingsMinutes li {
-    margin: 0 0 10px;
+    margin: 0 0 7px;
     list-style: none;
 }
 
 .settingsMinutes input {
     display: inline-block;
-    margin-right: 10px;
+    margin-right: 7px;
 }
 
 .settingsRightColumn,
@@ -36,14 +36,14 @@
 .settingsMinutes label {
     font-size: 0.8em;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
 }
 
 .settingsMinutes select,
 .settingsVoice select {
-    width: 165px;
-    padding: 4px;
-    margin-bottom: 15px;
+    width: 116px;
+    padding: 3px;
+    margin-bottom: 10px;
     border: 1px solid #3d3d3d;
     background-color: #909090;
     outline: none;
@@ -53,14 +53,14 @@
 .settingsRange label {
     font-size: 0.8em;
     display: block;
-    padding-left: 3px;
-    margin-bottom: 16px;
+    padding-left: 2px;
+    margin-bottom: 11px;
 }
 
 .settingsRange input {
-    width: 155px;
+    width: 109px;
     display: block;
-    margin-bottom: 22px;
+    margin-bottom: 15px;
 }
 
 .range {
@@ -70,8 +70,8 @@
 .range {
     cursor: pointer;
     -webkit-appearance: none;
-    border-radius: 4px;
-    height: 8px;
+    border-radius: 3px;
+    height: 6px;
     outline: none;
     background: #1b1d20;
     border: 1px solid #3d3d3d;
@@ -79,26 +79,26 @@
 
 .range::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 11px;
+    height: 11px;
     background: #909090;
-    border-radius: 16px;
+    border-radius: 11px;
     cursor: pointer;
-    box-shadow: 1px 1px 6px rgb(0, 0, 0);
+    box-shadow: 1px 1px 4px rgb(0, 0, 0);
     transition: 0.1s;
 }
 
 .range::-webkit-slider-thumb:hover,
 .range::-webkit-slider-thumb:active {
-    width: 18px;
-    height: 18px;
+    width: 13px;
+    height: 13px;
 }
 
 .testButton {
     font-size: 0.9em;
-    padding: 8px 12px;
+    padding: 6px 8px;
     border: 1px solid #3d3d3d;
-    border-radius: 6px;
+    border-radius: 4px;
     color: #fff;
     background-color: #071925;
     cursor: pointer;

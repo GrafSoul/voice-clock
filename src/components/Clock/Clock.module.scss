@@ -1,34 +1,34 @@
 .clockContent {
-    margin-top: 70px;
+    margin-top: 49px;
     cursor: default;
 }
 
 .digitalTime {
     display: flex;
     justify-content: center;
-    margin-left: -25px;
+    margin-left: -18px;
     font-family: "Digital Numbers";
     font-size: 3.4em;
     letter-spacing: -0.1em;
     text-align: center;
-    margin-bottom: 10px;
-    text-shadow: 0 0 20px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);
+    margin-bottom: 7px;
+    text-shadow: 0 0 14px rgba(10, 175, 230, 1), 0 0 14px rgba(10, 175, 230, 0);
 }
 
 .digitalPm {
-    margin-top: 5px;
-    margin-left: 5px;
+    margin-top: 3px;
+    margin-left: 3px;
     letter-spacing: -0.1em;
     display: inline-block;
     font-family: "Digital Numbers";
     font-size: .5em;
-    text-shadow: 0 0 10px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);
+    text-shadow: 0 0 7px rgba(10, 175, 230, 1), 0 0 14px rgba(10, 175, 230, 0);
 }
 
 .digitalDate {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: #a5a8aa;
     font-size: 1.3em;
     text-align: center;
-    text-shadow: 0 0 15px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);
+    text-shadow: 0 0 10px rgba(10, 175, 230, 1), 0 0 14px rgba(10, 175, 230, 0);
 }

@@ -1,13 +1,13 @@
 .mainContent {
-  height: 250px;
+  height: 175px;
   position: relative;
   overflow: hidden;
 }
 
 .settingsContent {
-  width: 380px;
-  height: 250px;
-  padding: 15px;
+  width: 266px;
+  height: 175px;
+  padding: 10px;
   position: absolute;
   top: 0;
   left: 0;
@@ -16,5 +16,5 @@
 }
 
 .settingsContentHide {
-  left: -600px;
+  left: -420px;
 }
