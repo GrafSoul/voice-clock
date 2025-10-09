@@ -3,6 +3,20 @@ const windowStateKeeper = require('electron-window-state');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
+// Disable GPU hardware acceleration to fix rendering errors
+app.disableHardwareAcceleration();
+
+// Global error handlers to prevent crashes
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    // Don't exit the app, just log the error
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    // Don't exit the app, just log the error
+});
+
 if (isDev) {
     try {
         require('electron-reload')(__dirname, {
@@ -68,7 +82,7 @@ const createWindow = async () => {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
             nodeIntegration: false,
-            sandbox: false,
+            // sandbox: true by default in modern Electron - no need to specify
         },
     });
 
@@ -102,12 +116,27 @@ const createWindow = async () => {
         isDev
             ? 'http://localhost:3000'
             : `file://${path.join(__dirname, 'index.html')}`,
-    );
+    ).catch(err => {
+        console.error('Failed to load URL:', err);
+    });
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
         if (isDev) {
-            mainWindow.webContents.openDevTools();
+            try {
+                mainWindow.webContents.openDevTools();
+            } catch (err) {
+                console.error('Failed to open DevTools:', err);
+            }
+        }
+    });
+
+    // Handle renderer process crashes
+    mainWindow.webContents.on('render-process-gone', (event, details) => {
+        console.error('Renderer process gone:', details);
+        if (details.reason !== 'clean-exit') {
+            // Reload the window if it crashed
+            mainWindow.reload();
         }
     });
 

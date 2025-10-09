@@ -26,6 +26,7 @@ const template = {
 
 const TextReader = ({ hours, min }) => {
     const voices = useRef(null);
+    const utteranceRef = useRef(null); // Store utterance in ref
 
     const [settings, setSettings] = useState({
         rate: 1,
@@ -35,23 +36,29 @@ const TextReader = ({ hours, min }) => {
         voice: 0,
     });
 
-    const utterance = new SpeechSynthesisUtterance();
-    // eslint-disable-next-line
-    const voicesAvailable = speechSynthesis.getVoices();
+    // Initialize utterance once
+    if (!utteranceRef.current) {
+        utteranceRef.current = new SpeechSynthesisUtterance();
+    }
 
     useEffect(() => {
-        const getSettings = JSON.parse(localStorage.getItem('settings'));
-
-        if (getSettings === null) {
+        try {
+            const savedSettings = localStorage.getItem('settings');
+            if (!savedSettings) {
+                setLocalStorage();
+            } else {
+                const getSettings = JSON.parse(savedSettings);
+                setSettings({
+                    rate: getSettings.rate,
+                    pitch: getSettings.pitch,
+                    volume: getSettings.volume,
+                    period: getSettings.period,
+                    voice: getSettings.voice,
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load settings:', error);
             setLocalStorage();
-        } else {
-            setSettings({
-                rate: getSettings.rate,
-                pitch: getSettings.pitch,
-                volume: getSettings.volume,
-                period: getSettings.period,
-                voice: getSettings.voice,
-            });
         }
         // eslint-disable-next-line
     }, []);
@@ -66,10 +73,14 @@ const TextReader = ({ hours, min }) => {
     }, [settings, hours, min]);
 
     useEffect(() => {
-        setTimeout(() => {
-            injectVoices(voices.current, speechSynthesis.getVoices());
-            voices.current.selectedIndex = settings.voice;
+        const timeoutId = setTimeout(() => {
+            if (voices.current) {
+                injectVoices(voices.current, speechSynthesis.getVoices());
+                voices.current.selectedIndex = settings.voice;
+            }
         }, 1000);
+        
+        return () => clearTimeout(timeoutId); // CLEANUP!
         // eslint-disable-next-line
     }, [voices, settings]);
 
@@ -112,6 +123,7 @@ const TextReader = ({ hours, min }) => {
             })
             .pop();
 
+        const utterance = utteranceRef.current;
         utterance.text = time;
         utterance.voice = selectedVoice;
         utterance.lang = selectedVoice.lang;
@@ -123,18 +135,26 @@ const TextReader = ({ hours, min }) => {
     };
 
     const setLocalStorage = () => {
-        localStorage.setItem('settings', JSON.stringify(settings));
+        try {
+            localStorage.setItem('settings', JSON.stringify(settings));
+        } catch (error) {
+            console.error('Failed to save settings:', error);
+        }
     };
 
     const handlerVoice = () => {
         setSettings((set) => ({ ...set, voice: voices.current.selectedIndex }));
-        localStorage.setItem(
-            'settings',
-            JSON.stringify({
-                ...settings,
-                voice: voices.current.selectedIndex,
-            }),
-        );
+        try {
+            localStorage.setItem(
+                'settings',
+                JSON.stringify({
+                    ...settings,
+                    voice: voices.current.selectedIndex,
+                }),
+            );
+        } catch (error) {
+            console.error('Failed to save voice setting:', error);
+        }
         speechSynthesis.cancel();
     };
 
@@ -175,10 +195,14 @@ const TextReader = ({ hours, min }) => {
     const handlerSelectTime = (e) => {
         let currentSelectTime = e.target.value;
         setSettings((set) => ({ ...set, period: currentSelectTime }));
-        localStorage.setItem(
-            'settings',
-            JSON.stringify({ ...settings, period: currentSelectTime }),
-        );
+        try {
+            localStorage.setItem(
+                'settings',
+                JSON.stringify({ ...settings, period: currentSelectTime }),
+            );
+        } catch (error) {
+            console.error('Failed to save period setting:', error);
+        }
         speechSynthesis.cancel();
     };
 

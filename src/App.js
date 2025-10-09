@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import moment from 'moment';
 
 import Header from './components/Header/Header';
@@ -20,6 +20,9 @@ const App = () => {
     const [min, setMin] = useState(moment().format('mm'));
     const [week, setWeek] = useState(moment().format('dddd'));
     const [pm, setPm] = useState(moment().format('a'));
+    
+    // Ref to track current alarms without recreating interval
+    const alarmsRef = useRef(alarms);
 
     const updateTime = useCallback(() => {
         const now = moment();
@@ -38,41 +41,65 @@ const App = () => {
 
     // Load alarms from localStorage on mount
     useEffect(() => {
-        const savedAlarms = localStorage.getItem('alarms');
-        if (savedAlarms) {
-            setAlarms(JSON.parse(savedAlarms));
+        try {
+            const savedAlarms = localStorage.getItem('alarms');
+            if (savedAlarms) {
+                const parsed = JSON.parse(savedAlarms);
+                if (Array.isArray(parsed)) {
+                    setAlarms(parsed);
+                } else {
+                    console.error('Invalid alarms data in localStorage, resetting');
+                    localStorage.removeItem('alarms');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load alarms from localStorage:', error);
+            localStorage.removeItem('alarms');
         }
     }, []);
 
-    // Check alarms every minute
+    // Update ref when alarms change
+    useEffect(() => {
+        alarmsRef.current = alarms;
+    }, [alarms]);
+
+    // Check alarms every second - interval created ONCE
     useEffect(() => {
         const checkAlarms = () => {
-            const now = moment();
-            const currentTime = now.format('HH:mm');
-            const currentDay = now.day();
-            const currentDateTime = now.format('YYYY-MM-DD HH:mm');
+            try {
+                const now = moment();
+                const currentTime = now.format('HH:mm');
+                const currentDay = now.day();
+                const currentDateTime = now.format('YYYY-MM-DD HH:mm');
 
-            alarms.forEach((alarm) => {
-                if (
-                    alarm.enabled &&
-                    alarm.time === currentTime &&
-                    alarm.days.includes(currentDay) &&
-                    (!alarm.lastTriggered || alarm.lastTriggered !== currentDateTime)
-                ) {
-                    setActiveAlarm(alarm);
-                    // Update last triggered time with full date+time
-                    const updatedAlarms = alarms.map((a) =>
-                        a.id === alarm.id ? { ...a, lastTriggered: currentDateTime } : a
-                    );
-                    setAlarms(updatedAlarms);
-                    localStorage.setItem('alarms', JSON.stringify(updatedAlarms));
-                }
-            });
+                alarmsRef.current.forEach((alarm) => {
+                    if (
+                        alarm.enabled &&
+                        alarm.time === currentTime &&
+                        alarm.days.includes(currentDay) &&
+                        (!alarm.lastTriggered || alarm.lastTriggered !== currentDateTime)
+                    ) {
+                        setActiveAlarm(alarm);
+                        // Update last triggered time with full date+time
+                        const updatedAlarms = alarmsRef.current.map((a) =>
+                            a.id === alarm.id ? { ...a, lastTriggered: currentDateTime } : a
+                        );
+                        setAlarms(updatedAlarms);
+                        try {
+                            localStorage.setItem('alarms', JSON.stringify(updatedAlarms));
+                        } catch (storageError) {
+                            console.error('Failed to save alarm state:', storageError);
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error checking alarms:', error);
+            }
         };
 
         const intervalId = setInterval(checkAlarms, 1000);
         return () => clearInterval(intervalId);
-    }, [alarms]);
+    }, []); // Empty deps - interval created ONCE, uses ref for current alarms
 
     const handleDismissAlarm = () => {
         setActiveAlarm(null);

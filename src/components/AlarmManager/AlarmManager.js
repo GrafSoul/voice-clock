@@ -23,14 +23,30 @@ const AlarmManager = ({ alarms, setAlarms, onClose }) => {
     const [presetMode, setPresetMode] = useState('custom');
 
     useEffect(() => {
-        const savedAlarms = localStorage.getItem('alarms');
-        if (savedAlarms) {
-            setAlarms(JSON.parse(savedAlarms));
+        try {
+            const savedAlarms = localStorage.getItem('alarms');
+            if (savedAlarms) {
+                const parsed = JSON.parse(savedAlarms);
+                if (Array.isArray(parsed)) {
+                    setAlarms(parsed);
+                } else {
+                    console.error('Invalid alarms data in localStorage');
+                    localStorage.removeItem('alarms');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load alarms:', error);
+            localStorage.removeItem('alarms');
         }
     }, [setAlarms]);
 
     const saveAlarmsToStorage = (alarmsToSave) => {
-        localStorage.setItem('alarms', JSON.stringify(alarmsToSave));
+        try {
+            localStorage.setItem('alarms', JSON.stringify(alarmsToSave));
+        } catch (error) {
+            console.error('Failed to save alarms:', error);
+            alert('Failed to save alarm. Please try again.');
+        }
     };
 
     const handleAddAlarm = () => {

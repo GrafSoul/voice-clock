@@ -7,15 +7,24 @@ const AlarmNotification = ({ alarm, onDismiss, onSnooze }) => {
 
     useEffect(() => {
         if (alarm) {
-            if (!alarmSoundRef.current) {
-                alarmSoundRef.current = new AlarmSound();
+            try {
+                if (!alarmSoundRef.current) {
+                    alarmSoundRef.current = new AlarmSound();
+                }
+                alarmSoundRef.current.play();
+            } catch (error) {
+                console.error('Failed to play alarm sound:', error);
+                // Continue showing notification even if sound fails
             }
-            alarmSoundRef.current.play();
         }
 
         return () => {
-            if (alarmSoundRef.current) {
-                alarmSoundRef.current.stop();
+            try {
+                if (alarmSoundRef.current) {
+                    alarmSoundRef.current.stop();
+                }
+            } catch (error) {
+                console.error('Failed to stop alarm sound:', error);
             }
         };
     }, [alarm]);
