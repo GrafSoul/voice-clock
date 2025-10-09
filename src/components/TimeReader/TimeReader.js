@@ -73,14 +73,30 @@ const TextReader = ({ hours, min }) => {
     }, [settings, hours, min]);
 
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            if (voices.current) {
-                injectVoices(voices.current, speechSynthesis.getVoices());
-                voices.current.selectedIndex = settings.voice;
+        const loadVoices = () => {
+            try {
+                const availableVoices = speechSynthesis.getVoices();
+                if (voices.current && availableVoices.length > 0) {
+                    injectVoices(voices.current, availableVoices);
+                    voices.current.selectedIndex = settings.voice;
+                }
+            } catch (error) {
+                console.error('Failed to inject voices:', error);
             }
-        }, 1000);
+        };
+
+        // Load voices immediately if available
+        loadVoices();
+
+        // Also listen for voiceschanged event (voices load async)
+        speechSynthesis.addEventListener('voiceschanged', loadVoices);
+
+        const timeoutId = setTimeout(loadVoices, 1000);
         
-        return () => clearTimeout(timeoutId); // CLEANUP!
+        return () => {
+            clearTimeout(timeoutId);
+            speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+        };
         // eslint-disable-next-line
     }, [voices, settings]);
 
@@ -110,28 +126,49 @@ const TextReader = ({ hours, min }) => {
     };
 
     const handlerSpeak = (time) => {
-        let selectedOption =
-            voices.current.options[voices.current.selectedIndex];
+        try {
+            if (!voices.current || !voices.current.options || voices.current.options.length === 0) {
+                console.warn('Voices not available yet');
+                return;
+            }
 
-        let selectedVoice = speechSynthesis
-            .getVoices()
-            .filter((voice) => {
-                return (
-                    voice.voiceURI ===
-                    selectedOption.getAttribute('data-voice-uri')
-                );
-            })
-            .pop();
+            let selectedOption = voices.current.options[voices.current.selectedIndex];
+            if (!selectedOption) {
+                console.warn('No voice option selected');
+                return;
+            }
 
-        const utterance = utteranceRef.current;
-        utterance.text = time;
-        utterance.voice = selectedVoice;
-        utterance.lang = selectedVoice.lang;
-        utterance.rate = settings.rate;
-        utterance.pitch = settings.pitch;
-        utterance.volume = settings.volume;
+            let selectedVoice = speechSynthesis
+                .getVoices()
+                .filter((voice) => {
+                    return (
+                        voice.voiceURI ===
+                        selectedOption.getAttribute('data-voice-uri')
+                    );
+                })
+                .pop();
 
-        speechSynthesis.speak(utterance);
+            if (!selectedVoice) {
+                console.warn('Selected voice not found, using default');
+                selectedVoice = speechSynthesis.getVoices()[0];
+                if (!selectedVoice) {
+                    console.error('No voices available at all');
+                    return;
+                }
+            }
+
+            const utterance = utteranceRef.current;
+            utterance.text = time;
+            utterance.voice = selectedVoice;
+            utterance.lang = selectedVoice.lang;
+            utterance.rate = settings.rate;
+            utterance.pitch = settings.pitch;
+            utterance.volume = settings.volume;
+
+            speechSynthesis.speak(utterance);
+        } catch (error) {
+            console.error('Failed to speak time:', error);
+        }
     };
 
     const setLocalStorage = () => {
