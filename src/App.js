@@ -119,13 +119,11 @@ const App = () => {
 
             <AlarmList alarms={alarms} />
 
-            {isAlarmManager && (
-                <AlarmManager
-                    alarms={alarms}
-                    setAlarms={setAlarms}
-                    onClose={() => setIsAlarmManager(false)}
-                />
-            )}
+            <AlarmManager
+                alarms={alarms}
+                setAlarms={setAlarms}
+                onClose={isAlarmManager ? () => setIsAlarmManager(false) : null}
+            />
 
             {activeAlarm && (
                 <AlarmNotification

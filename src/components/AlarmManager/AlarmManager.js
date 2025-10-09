@@ -111,164 +111,155 @@ const AlarmManager = ({ alarms, setAlarms, onClose }) => {
     };
 
     return (
-        <div className={classes.overlay}>
-            <div className={classes.modal}>
-                <div className={classes.header}>
-                    <h2>Alarm Settings</h2>
-                    <button onClick={onClose} className={classes.closeBtn}>
-                        <i className="fas fa-times"></i>
-                    </button>
+        <div
+            className={[
+                classes.alarmPanel,
+                onClose ? null : classes.alarmPanelHide,
+            ].join(' ')}
+        >
+            <div className={classes.newAlarm}>
+                <div className={classes.formGroup}>
+                    <label>Time</label>
+                    <input
+                        type="time"
+                        value={newAlarm.time}
+                        onChange={(e) =>
+                            setNewAlarm({ ...newAlarm, time: e.target.value })
+                        }
+                        className={classes.timeInput}
+                    />
                 </div>
 
-                <div className={classes.content}>
-                    <div className={classes.newAlarm}>
-                        <h3>Add New Alarm</h3>
+                <div className={classes.formGroup}>
+                    <label>Label (optional)</label>
+                    <input
+                        type="text"
+                        value={newAlarm.label}
+                        onChange={(e) =>
+                            setNewAlarm({ ...newAlarm, label: e.target.value })
+                        }
+                        placeholder="Wake up, Meeting, etc."
+                        className={classes.textInput}
+                    />
+                </div>
 
-                        <div className={classes.formGroup}>
-                            <label>Time</label>
-                            <input
-                                type="time"
-                                value={newAlarm.time}
-                                onChange={(e) =>
-                                    setNewAlarm({ ...newAlarm, time: e.target.value })
-                                }
-                                className={classes.timeInput}
-                            />
-                        </div>
-
-                        <div className={classes.formGroup}>
-                            <label>Label (optional)</label>
-                            <input
-                                type="text"
-                                value={newAlarm.label}
-                                onChange={(e) =>
-                                    setNewAlarm({ ...newAlarm, label: e.target.value })
-                                }
-                                placeholder="Wake up, Meeting, etc."
-                                className={classes.textInput}
-                            />
-                        </div>
-
-                        <div className={classes.formGroup}>
-                            <label>Repeat</label>
-                            <div className={classes.presetButtons}>
-                                <button
-                                    className={
-                                        presetMode === 'today' ? classes.active : ''
-                                    }
-                                    onClick={() => setPresetMode('today')}
-                                >
-                                    Today
-                                </button>
-                                <button
-                                    className={
-                                        presetMode === 'everyday' ? classes.active : ''
-                                    }
-                                    onClick={() => setPresetMode('everyday')}
-                                >
-                                    Every day
-                                </button>
-                                <button
-                                    className={
-                                        presetMode === 'weekdays' ? classes.active : ''
-                                    }
-                                    onClick={() => setPresetMode('weekdays')}
-                                >
-                                    Weekdays
-                                </button>
-                                <button
-                                    className={
-                                        presetMode === 'weekends' ? classes.active : ''
-                                    }
-                                    onClick={() => setPresetMode('weekends')}
-                                >
-                                    Weekends
-                                </button>
-                                <button
-                                    className={
-                                        presetMode === 'custom' ? classes.active : ''
-                                    }
-                                    onClick={() => setPresetMode('custom')}
-                                >
-                                    Custom
-                                </button>
-                            </div>
-                        </div>
-
-                        {presetMode === 'custom' && (
-                            <div className={classes.formGroup}>
-                                <label>Select Days</label>
-                                <div className={classes.daysSelector}>
-                                    {DAYS_OF_WEEK.map((day) => (
-                                        <button
-                                            key={day.id}
-                                            className={
-                                                newAlarm.days.includes(day.id)
-                                                    ? classes.active
-                                                    : ''
-                                            }
-                                            onClick={() => toggleDay(day.id)}
-                                        >
-                                            {day.short}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
+                <div className={classes.formGroup}>
+                    <label>Repeat</label>
+                    <div className={classes.presetButtons}>
                         <button
-                            onClick={handleAddAlarm}
-                            className={classes.addButton}
+                            className={
+                                presetMode === 'today' ? classes.active : ''
+                            }
+                            onClick={() => setPresetMode('today')}
                         >
-                            <i className="fas fa-plus"></i> Add Alarm
+                                    Today
+                        </button>
+                        <button
+                            className={
+                                presetMode === 'everyday' ? classes.active : ''
+                            }
+                            onClick={() => setPresetMode('everyday')}
+                        >
+                                    Every day
+                        </button>
+                        <button
+                            className={
+                                presetMode === 'weekdays' ? classes.active : ''
+                            }
+                            onClick={() => setPresetMode('weekdays')}
+                        >
+                                    Weekdays
+                        </button>
+                        <button
+                            className={
+                                presetMode === 'weekends' ? classes.active : ''
+                            }
+                            onClick={() => setPresetMode('weekends')}
+                        >
+                                    Weekends
+                        </button>
+                        <button
+                            className={
+                                presetMode === 'custom' ? classes.active : ''
+                            }
+                            onClick={() => setPresetMode('custom')}
+                        >
+                                    Custom
                         </button>
                     </div>
-
-                    <div className={classes.alarmsList}>
-                        <h3>Active Alarms ({alarms.length})</h3>
-                        {alarms.length === 0 ? (
-                            <p className={classes.emptyState}>
-                                No alarms set. Create your first alarm above.
-                            </p>
-                        ) : (
-                            <div className={classes.alarmsGrid}>
-                                {alarms.map((alarm) => (
-                                    <div key={alarm.id} className={classes.alarmCard}>
-                                        <div className={classes.alarmHeader}>
-                                            <div className={classes.alarmTime}>
-                                                {alarm.time}
-                                            </div>
-                                            <label className={classes.switch}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={alarm.enabled}
-                                                    onChange={() =>
-                                                        handleToggleAlarm(alarm.id)
-                                                    }
-                                                />
-                                                <span className={classes.slider}></span>
-                                            </label>
-                                        </div>
-                                        {alarm.label && (
-                                            <div className={classes.alarmLabel}>
-                                                {alarm.label}
-                                            </div>
-                                        )}
-                                        <div className={classes.alarmDays}>
-                                            {getDaysDisplay(alarm.days)}
-                                        </div>
-                                        <button
-                                            onClick={() => handleDeleteAlarm(alarm.id)}
-                                            className={classes.deleteBtn}
-                                        >
-                                            <i className="fas fa-trash"></i> Delete
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
                 </div>
+
+                {presetMode === 'custom' && (
+                    <div className={classes.formGroup}>
+                        <label>Select Days</label>
+                        <div className={classes.daysSelector}>
+                            {DAYS_OF_WEEK.map((day) => (
+                                <button
+                                    key={day.id}
+                                    className={
+                                        newAlarm.days.includes(day.id)
+                                            ? classes.active
+                                            : ''
+                                    }
+                                    onClick={() => toggleDay(day.id)}
+                                >
+                                    {day.short}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                <button
+                    onClick={handleAddAlarm}
+                    className={classes.addButton}
+                >
+                    <i className="fas fa-plus"></i> Add Alarm
+                </button>
+            </div>
+
+            <div className={classes.alarmsList}>
+                {alarms.length === 0 ? (
+                    <p className={classes.emptyState}>
+                                No alarms set. Create your first alarm above.
+                    </p>
+                ) : (
+                    <div className={classes.alarmsGrid}>
+                        {alarms.map((alarm) => (
+                            <div key={alarm.id} className={classes.alarmCard}>
+                                <div className={classes.alarmHeader}>
+                                    <div className={classes.alarmTime}>
+                                        {alarm.time}
+                                    </div>
+                                    <label className={classes.switch}>
+                                        <input
+                                            type="checkbox"
+                                            checked={alarm.enabled}
+                                            onChange={() =>
+                                                handleToggleAlarm(alarm.id)
+                                            }
+                                        />
+                                        <span className={classes.slider}></span>
+                                    </label>
+                                </div>
+                                {alarm.label && (
+                                    <div className={classes.alarmLabel}>
+                                        {alarm.label}
+                                    </div>
+                                )}
+                                <div className={classes.alarmDays}>
+                                    {getDaysDisplay(alarm.days)}
+                                </div>
+                                <button
+                                    onClick={() => handleDeleteAlarm(alarm.id)}
+                                    className={classes.deleteBtn}
+                                >
+                                    <i className="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
