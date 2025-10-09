@@ -50,18 +50,19 @@ const App = () => {
             const now = moment();
             const currentTime = now.format('HH:mm');
             const currentDay = now.day();
+            const currentDateTime = now.format('YYYY-MM-DD HH:mm');
 
             alarms.forEach((alarm) => {
                 if (
                     alarm.enabled &&
                     alarm.time === currentTime &&
                     alarm.days.includes(currentDay) &&
-                    (!alarm.lastTriggered || alarm.lastTriggered !== currentTime)
+                    (!alarm.lastTriggered || alarm.lastTriggered !== currentDateTime)
                 ) {
                     setActiveAlarm(alarm);
-                    // Update last triggered time
+                    // Update last triggered time with full date+time
                     const updatedAlarms = alarms.map((a) =>
-                        a.id === alarm.id ? { ...a, lastTriggered: currentTime } : a
+                        a.id === alarm.id ? { ...a, lastTriggered: currentDateTime } : a
                     );
                     setAlarms(updatedAlarms);
                     localStorage.setItem('alarms', JSON.stringify(updatedAlarms));
@@ -78,26 +79,8 @@ const App = () => {
     };
 
     const handleSnoozeAlarm = (minutes) => {
-        if (activeAlarm) {
-            const snoozeTime = moment()
-                .add(minutes, 'minutes')
-                .format('HH:mm');
-            const currentDay = moment().day();
-
-            const snoozeAlarm = {
-                ...activeAlarm,
-                id: Date.now(),
-                time: snoozeTime,
-                label: `${activeAlarm.label || 'Alarm'} (Snoozed)`,
-                days: [currentDay],
-                lastTriggered: null,
-            };
-
-            const updatedAlarms = [...alarms, snoozeAlarm];
-            setAlarms(updatedAlarms);
-            localStorage.setItem('alarms', JSON.stringify(updatedAlarms));
-            setActiveAlarm(null);
-        }
+        // Just close notification - alarm stays active for next trigger
+        setActiveAlarm(null);
     };
 
     return (
