@@ -74,7 +74,16 @@ const TextReader = ({ hours, min }) => {
     }, [voices, settings]);
 
     const injectVoices = (voicesElement, voices) => {
-        voicesElement.innerHTML = voices
+        // Filter only Russian and English voices
+        const filteredVoices = voices.filter((voice) => {
+            const lang = voice.lang.toLowerCase();
+            return (
+                lang.startsWith('ru') || // Russian
+                lang.startsWith('en')    // English
+            );
+        });
+
+        voicesElement.innerHTML = filteredVoices
             .map((voice) => {
                 let option = document.createElement('option');
                 option.value = voice.lang;
