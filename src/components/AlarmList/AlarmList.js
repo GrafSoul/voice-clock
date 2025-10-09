@@ -2,11 +2,21 @@ import classes from './AlarmList.module.scss';
 
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const AlarmList = ({ alarms }) => {
+const AlarmList = ({ alarms, setIsAlarmManager }) => {
     const activeAlarms = alarms.filter((alarm) => alarm.enabled);
 
     if (activeAlarms.length === 0) {
-        return null;
+        return (
+            <div className={classes.alarmList}>
+                <button 
+                    className={classes.addAlarmBtn}
+                    onClick={() => setIsAlarmManager(true)}
+                >
+                    <i className="fas fa-plus-circle"></i>
+                    <span>Выбрать будильник</span>
+                </button>
+            </div>
+        );
     }
 
     const getDaysDisplay = (days) => {

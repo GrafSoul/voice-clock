@@ -101,7 +101,7 @@ const App = () => {
                 <TimeReader hours={hours} min={min} />
             </div>
 
-            <AlarmList alarms={alarms} />
+            <AlarmList alarms={alarms} setIsAlarmManager={setIsAlarmManager} />
 
             <AlarmManager
                 alarms={alarms}

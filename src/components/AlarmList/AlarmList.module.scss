@@ -72,3 +72,34 @@
     color: rgba(10, 175, 230, 0.7);
     margin-left: auto;
 }
+
+.addAlarmBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 4px;
+    background-color: rgba(10, 175, 230, 0.15);
+    border: 1px solid rgba(10, 175, 230, 0.4);
+    border-radius: 3px;
+    font-size: 7px;
+    color: rgba(10, 175, 230, 1);
+    text-shadow: 0 0 5px rgba(10, 175, 230, 0.5);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+
+    i {
+        font-size: 7px;
+    }
+
+    &:hover {
+        background-color: rgba(10, 175, 230, 0.25);
+        border-color: rgba(10, 175, 230, 0.6);
+        transform: scale(1.02);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
